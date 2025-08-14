@@ -25,7 +25,8 @@
         .font-body { font-family: 'Poppins', sans-serif; }
         html { height: 100%; }
         body {
-            background-color: #3C2A1E;
+            /* UPDATED: Black wooden surface background */
+            background-color: #000000;
             background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
             font-family: 'Poppins', sans-serif;
             position: relative;
@@ -33,8 +34,8 @@
             height: 100vh;
         }
         .text-bright-pink {
-            color: #f9a8d4;
-            text-shadow: 0 0 25px rgba(249, 168, 212, 0.8), 0 0 10px rgba(249, 168, 212, 1);
+            color: #f472b6; /* A slightly deeper pink */
+            text-shadow: 0 0 15px rgba(244, 114, 182, 0.5), 0 0 5px rgba(244, 114, 182, 0.7); /* Reduced glow */
         }
         .btn-blue {
             background-color: #3b82f6; color: white;
@@ -46,9 +47,9 @@
         .btn-blue:hover:not(:disabled) { background-color: #2563eb; transform: scale(1.05); box-shadow: 0 0 30px rgba(59, 130, 246, 1); }
         .btn-blue:disabled { background-color: #555; cursor: not-allowed; box-shadow: none; }
         .crystal-glass-card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
         ::-webkit-scrollbar { width: 8px; }
@@ -63,7 +64,7 @@
 </head>
 <body class="font-body text-white flex flex-col opacity-0 transition-opacity duration-500">
 
-    <header class="bg-stone-900/20 backdrop-blur-lg shadow-sm border-b border-white/10 relative z-10">
+    <header class="bg-black/20 backdrop-blur-lg shadow-sm border-b border-white/10 relative z-10">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
             <a href="index.html" class="font-logo text-3xl font-black text-bright-pink">LLB.ai</a>
             <div id="app-header-nav" class="hidden items-center space-x-4">
@@ -342,7 +343,7 @@ ${content}`;
             chatHistory.push({ role: "user", parts: [{ text: prompt }] });
             const payload = { contents: chatHistory };
             
-            const apiKey = "AIzaSyCDQ-NvpdGXKfLm3L5x_66c6NYX24oQED4"; 
+            const apiKey = "YOUR_API_KEY_HERE"; 
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${apiKey}`;
 
             // Implemented exponential backoff for API call retries
@@ -552,6 +553,5 @@ ${content}`;
         }
 
     </script>
-    <!-- REMOVED old Firebase v8 script tags -->
 </body>
 </html>

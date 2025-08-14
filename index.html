@@ -13,29 +13,54 @@
         .font-punchline { font-family: 'Lora', serif; }
         .font-body { font-family: 'Poppins', sans-serif; }
         body {
-            background-color: #3C2A1E;
+            /* UPDATED: Black wooden surface background */
+            background-color: #000000;
             background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
             font-family: 'Poppins', sans-serif;
             position: relative;
             overflow-x: hidden;
         }
+        /* NEW: Doodle animation container */
         #animation-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
         }
+        /* NEW: Doodle styles */
         .doodle {
-            position: absolute; bottom: -150px;
-            color: rgba(255, 255, 255, 0.07);
-            animation: floatUp 5s infinite linear;
+            position: absolute;
+            bottom: -150px;
+            /* Faint pink color for doodles */
+            color: rgba(249, 168, 212, 0.07);
+            font-size: 60px;
+            animation: floatUp 20s infinite linear;
+            user-select: none;
         }
+        /* NEW: Doodle animation keyframes */
         @keyframes floatUp {
-            from { transform: translateY(0) translateX(var(--x-start)); opacity: 0; }
-            25% { opacity: 1; } 75% { opacity: 1; }
-            to { transform: translateY(-120vh) translateX(var(--x-end)); opacity: 0; }
+            from {
+                transform: translateY(0) translateX(var(--x-start)) rotate(0deg);
+                opacity: 0;
+            }
+            25% {
+                opacity: 1;
+            }
+            75% {
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-120vh) translateX(var(--x-end)) rotate(720deg);
+                opacity: 0;
+            }
         }
+        /* UPDATED: Pink text with reduced brightness */
         .text-bright-pink {
-            color: #f9a8d4;
-            text-shadow: 0 0 25px rgba(249, 168, 212, 0.8), 0 0 10px rgba(249, 168, 212, 1);
+            color: #f472b6; /* A slightly deeper pink */
+            text-shadow: 0 0 15px rgba(244, 114, 182, 0.5), 0 0 5px rgba(244, 114, 182, 0.7); /* Reduced glow */
         }
         .btn-blue {
             background-color: #3b82f6; color: white;
@@ -56,9 +81,9 @@
         .btn-red:hover:not(:disabled) { background-color: #b91c1c; transform: scale(1.05); box-shadow: 0 0 30px rgba(220, 38, 38, 1); }
         .btn-launch { padding: 0.8rem 2rem; }
         .crystal-glass-card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05); /* Slightly adjusted for black background */
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
         #auth-modal {
@@ -70,7 +95,7 @@
             color: white;
         }
         .auth-form input::placeholder { color: rgba(255,255,255,0.5); }
-        .auth-form select option { background-color: #3C2A1E; color: white; }
+        .auth-form select option { background-color: #1f2937; color: white; }
          .testimonial-container { position: relative; }
         .testimonial-scroller {
             display: flex; overflow-x: auto;
@@ -97,47 +122,22 @@
         .testimonial-nav:disabled { opacity: 0.3; cursor: not-allowed; }
 
         /* Chatbot styles */
-#chatbot-messages::-webkit-scrollbar {
-    width: 6px;
-}
-#chatbot-messages::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.1);
-    border-radius: 3px;
-}
-#chatbot-messages::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.3);
-    border-radius: 3px;
-}
-
-.chatbot-message {
-    max-width: 90%;
-    padding: 8px 12px;
-    border-radius: 0.75rem;
-    margin-bottom: 4px;
-    word-wrap: break-word;
-}
-
-.user-message {
-    background-color: #3b82f6;
-    color: white;
-    margin-left: auto;
-    border-bottom-right-radius: 0.25rem;
-}
-
-.bot-message {
-    background-color: #4b5563;
-    color: white;
-    margin-right: auto;
-    border-bottom-left-radius: 0.25rem;
-}
-
+        #chatbot-messages::-webkit-scrollbar { width: 6px; }
+        #chatbot-messages::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); border-radius: 3px; }
+        #chatbot-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 3px; }
+        .chatbot-message { max-width: 90%; padding: 8px 12px; border-radius: 0.75rem; margin-bottom: 4px; word-wrap: break-word; }
+        .user-message { background-color: #3b82f6; color: white; margin-left: auto; border-bottom-right-radius: 0.25rem; }
+        .bot-message { background-color: #4b5563; color: white; margin-right: auto; border-bottom-left-radius: 0.25rem; }
     </style>
 </head>
 <body class="font-body text-gray-300">
 
+    <!-- NEW: Animation container for doodles -->
+    <div id="animation-container"></div>
+
     <!-- Main Content -->
     <div id="main-content">
-        <header class="fixed top-0 left-0 right-0 z-50 bg-stone-900/20 backdrop-blur-lg shadow-sm border-b border-white/10">
+        <header class="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-lg shadow-sm border-b border-white/10">
             <div class="container mx-auto px-6 py-4 flex justify-between items-center">
                 <a href="#" class="font-logo text-3xl font-black text-bright-pink">LLB.ai</a>
                 <nav class="hidden md:flex space-x-4 items-center">
@@ -350,6 +350,28 @@
         </div>
     </div>
     
+    <!-- Floating Chatbot -->
+    <div id="chatbot-container" class="fixed bottom-6 right-6 w-80 h-96 bg-gray-900/80 backdrop-blur-sm rounded-t-xl shadow-xl flex flex-col border border-white/10 z-50 hidden">
+        <div class="bg-gray-900 px-4 py-3 rounded-t-xl flex justify-between items-center">
+            <h3 class="font-bold text-bright-pink">LLB.ai Assistant</h3>
+            <button id="close-chatbot" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+        </div>
+        <div id="chatbot-messages" class="flex-1 p-4 overflow-y-auto text-sm space-y-2">
+            <!-- Messages will appear here -->
+        </div>
+        <div class="p-3 border-t border-white/10">
+            <input id="chatbot-input" type="text" placeholder="Type your question..." 
+                   class="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-bright-pink">
+        </div>
+    </div>
+
+    <!-- Chatbot Toggle Button -->
+    <button id="chatbot-toggle" class="fixed bottom-6 right-6 bg-bright-pink text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform z-40">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+    </button>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
         import { 
@@ -365,10 +387,10 @@
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 
         const firebaseConfig = {
-          apiKey: "AIzaSyAzumRqz2Lat4M_CW9LtiUebaZTQIXJ_MA",
+            apiKey: "AIzaSyAzumRqz2Lat4M_CW9LtiUebaZTQIXJ_MA",
             authDomain: "llbai-baefd.firebaseapp.com",
             projectId: "llbai-baefd",
-            storageBucket: "llbai-baefd.firebasestorage.app",
+            storageBucket: "llbai-baefd.appspot.com",
             messagingSenderId: "12532846117",
             appId: "1:12532846117:web:0e3b74c0ec2f495b96f9cc",
             measurementId: "G-D0HK063ZF8"
@@ -378,34 +400,31 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // --- DOM Elements ---
         const authModal = document.getElementById('auth-modal');
         const loginSignupBtn = document.getElementById('login-signup-btn');
         const tryFreeBtn = document.getElementById('try-free-btn');
         const closeAuthModalBtn = document.getElementById('close-auth-modal');
-        
         const loginView = document.getElementById('login-view');
         const signupView = document.getElementById('signup-view');
         const forgotPasswordView = document.getElementById('forgot-password-view');
-
         const loginForm = document.getElementById('login-form');
         const signupForm = document.getElementById('signup-form');
         const forgotPasswordForm = document.getElementById('forgot-password-form');
-
         const showSignupLink = document.getElementById('show-signup-link');
         const showLoginLink = document.getElementById('show-login-link');
         const forgotPasswordLink = document.getElementById('forgot-password-link');
         const backToLoginLink = document.getElementById('back-to-login-link');
-        
         const loginError = document.getElementById('login-error');
         const signupError = document.getElementById('signup-error');
         const resetMessage = document.getElementById('reset-message');
-
         const userInfoNav = document.getElementById('user-info-nav');
         const userGreeting = document.getElementById('user-greeting');
         const logoutBtn = document.getElementById('logout-btn');
-        
         const faqToggles = document.querySelectorAll('.faq-toggle');
+        const animationContainer = document.getElementById('animation-container');
 
+        // --- Auth State ---
         onAuthStateChanged(auth, user => {
             if (user) {
                 loginSignupBtn.classList.add('hidden');
@@ -419,24 +438,12 @@
             }
         });
 
+        // --- Modals and Views ---
         const openModal = () => authModal.classList.remove('hidden');
         const closeModal = () => authModal.classList.add('hidden');
-        
-        const showLoginView = () => {
-            signupView.classList.add('hidden');
-            forgotPasswordView.classList.add('hidden');
-            loginView.classList.remove('hidden');
-        };
-        const showSignupView = () => {
-            loginView.classList.add('hidden');
-            forgotPasswordView.classList.add('hidden');
-            signupView.classList.remove('hidden');
-        };
-        const showForgotPasswordView = () => {
-            loginView.classList.add('hidden');
-            signupView.classList.add('hidden');
-            forgotPasswordView.classList.remove('hidden');
-        };
+        const showLoginView = () => { signupView.classList.add('hidden'); forgotPasswordView.classList.add('hidden'); loginView.classList.remove('hidden'); };
+        const showSignupView = () => { loginView.classList.add('hidden'); forgotPasswordView.classList.add('hidden'); signupView.classList.remove('hidden'); };
+        const showForgotPasswordView = () => { loginView.classList.add('hidden'); signupView.classList.add('hidden'); forgotPasswordView.classList.remove('hidden'); };
 
         loginSignupBtn.addEventListener('click', openModal);
         tryFreeBtn.addEventListener('click', openModal);
@@ -446,6 +453,7 @@
         forgotPasswordLink.addEventListener('click', (e) => { e.preventDefault(); showForgotPasswordView(); });
         backToLoginLink.addEventListener('click', (e) => { e.preventDefault(); showLoginView(); });
         
+        // --- Forms ---
         signupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             signupError.textContent = '';
@@ -459,15 +467,10 @@
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
-                
                 await updateProfile(user, { displayName: name });
                 await sendEmailVerification(user);
                 alert('Verification email sent! Please check your inbox.');
-
-                await setDoc(doc(db, "users", user.uid), {
-                    name, email, age, gender, profession, createdAt: new Date()
-                });
-
+                await setDoc(doc(db, "users", user.uid), { name, email, age, gender, profession, createdAt: new Date() });
                 closeModal();
             } catch (error) {
                 signupError.textContent = error.message;
@@ -479,7 +482,6 @@
             loginError.textContent = '';
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
-
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 if (!userCredential.user.emailVerified) {
@@ -506,18 +508,14 @@
         });
 
         logoutBtn.addEventListener('click', async () => {
-            try {
-                await signOut(auth);
-            } catch (error) {
-                alert(error.message);
-            }
+            try { await signOut(auth); } catch (error) { alert(error.message); }
         });
 
+        // --- UI Interactions ---
         faqToggles.forEach(toggle => {
             toggle.addEventListener('click', () => {
                 const content = toggle.nextElementSibling;
                 const icon = toggle.querySelector('span');
-                
                 if (content.style.maxHeight) {
                     content.style.maxHeight = null;
                     icon.textContent = '+';
@@ -544,118 +542,73 @@
                 prevBtn.disabled = scroller.scrollLeft < 10;
                 nextBtn.disabled = scroller.scrollLeft >= (scroller.scrollWidth - scroller.clientWidth - 10);
             };
-            prevBtn.addEventListener('click', () => {
-                scroller.scrollBy({ left: -cardWidth, behavior: 'smooth' });
-            });
-            nextBtn.addEventListener('click', () => {
-                scroller.scrollBy({ left: cardWidth, behavior: 'smooth' });
-            });
+            prevBtn.addEventListener('click', () => scroller.scrollBy({ left: -cardWidth, behavior: 'smooth' }));
+            nextBtn.addEventListener('click', () => scroller.scrollBy({ left: cardWidth, behavior: 'smooth' }));
             scroller.addEventListener('scroll', updateNavButtons);
             window.addEventListener('resize', updateNavButtons);
             updateNavButtons();
         }
 
-        // Chatbot functionality
-const chatbotToggle = document.getElementById('chatbot-toggle');
-const chatbotContainer = document.getElementById('chatbot-container');
-const closeChatbot = document.getElementById('close-chatbot');
-const chatbotMessages = document.getElementById('chatbot-messages');
-const chatbotInput = document.getElementById('chatbot-input');
+        // --- Chatbot Functionality ---
+        const chatbotToggle = document.getElementById('chatbot-toggle');
+        const chatbotContainer = document.getElementById('chatbot-container');
+        const closeChatbot = document.getElementById('close-chatbot');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+        const chatbotInput = document.getElementById('chatbot-input');
 
-// Initial bot message
-const initialMessages = [
-    "Hello! I'm your LLB.ai assistant. 👋",
-    "I can help you understand how LLB.ai can assist with your legal document needs.",
-    "Here's what I can help with:",
-    "• Analyzing contracts and legal documents",
-    "• Explaining complex legal terms",
-    "• Summarizing key points from documents",
-    "• Comparing different versions of contracts",
-    "• Suggesting negotiation strategies",
-    "Feel free to ask me anything about our services!"
-];
-
-// Show/hide chatbot
-chatbotToggle.addEventListener('click', () => {
-    chatbotContainer.classList.toggle('hidden');
-    if (!chatbotContainer.classList.contains('hidden')) {
-        // Only add initial messages if the chat is empty
-        if (chatbotMessages.children.length === 0) {
-            initialMessages.forEach((msg, index) => {
-                setTimeout(() => {
-                    addBotMessage(msg);
-                }, index * 500);
-            });
-        }
-    }
-});
-
-closeChatbot.addEventListener('click', () => {
-    chatbotContainer.classList.add('hidden');
-});
-
-// Add message to chat
-function addBotMessage(text) {
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('chatbot-message', 'bot-message');
-    messageDiv.textContent = text;
-    chatbotMessages.appendChild(messageDiv);
-    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-}
-
-function addUserMessage(text) {
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('chatbot-message', 'user-message');
-    messageDiv.textContent = text;
-    chatbotMessages.appendChild(messageDiv);
-    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-}
-
-// Handle user input
-chatbotInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter' && chatbotInput.value.trim()) {
-        const userMessage = chatbotInput.value.trim();
-        addUserMessage(userMessage);
-        chatbotInput.value = '';
+        const initialMessages = [ "Hello! I'm your LLB.ai assistant. 👋", "I can help you understand how LLB.ai can assist with your legal document needs.", "Feel free to ask me anything about our services!" ];
         
-        // Simple bot responses (you can expand this)
-        setTimeout(() => {
-            if (userMessage.toLowerCase().includes('feature') || userMessage.toLowerCase().includes('what can you do')) {
-                addBotMessage("LLB.ai offers features like document analysis, risk scoring, negotiation suggestions, and more. Check our Features section for details!");
-            } else if (userMessage.toLowerCase().includes('price') || userMessage.toLowerCase().includes('cost')) {
-                addBotMessage("We offer a free trial with no credit card required. After that, we have affordable monthly plans starting at $9.99.");
-            } else if (userMessage.toLowerCase().includes('secure') || userMessage.toLowerCase().includes('privacy')) {
-                addBotMessage("Your privacy is our priority. Documents are processed securely and never stored permanently after analysis.");
-            } else if (userMessage.toLowerCase().includes('contact') || userMessage.toLowerCase().includes('support')) {
-                addBotMessage("You can reach our support team at support@llb.ai. We typically respond within 24 hours.");
-            } else {
-                addBotMessage("I'm an AI assistant and my knowledge is limited to LLB.ai services. For legal advice, please consult a qualified professional.");
+        chatbotToggle.addEventListener('click', () => {
+            chatbotContainer.classList.toggle('hidden');
+            if (!chatbotContainer.classList.contains('hidden') && chatbotMessages.children.length === 0) {
+                initialMessages.forEach((msg, index) => setTimeout(() => addBotMessage(msg), index * 500));
             }
-        }, 500);
-    }
-});
+        });
+        closeChatbot.addEventListener('click', () => chatbotContainer.classList.add('hidden'));
+
+        function addMessageToChat(text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('chatbot-message', type === 'user' ? 'user-message' : 'bot-message');
+            messageDiv.textContent = text;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+        const addBotMessage = (text) => addMessageToChat(text, 'bot');
+        const addUserMessage = (text) => addMessageToChat(text, 'user');
+
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && chatbotInput.value.trim()) {
+                const userMessage = chatbotInput.value.trim();
+                addUserMessage(userMessage);
+                chatbotInput.value = '';
+                setTimeout(() => {
+                    if (userMessage.toLowerCase().includes('price')) {
+                        addBotMessage("We offer a free trial! After that, plans start at $9.99/month.");
+                    } else {
+                        addBotMessage("For details on features or security, please see the main page. For legal advice, consult a qualified professional.");
+                    }
+                }, 500);
+            }
+        });
+
+        // --- NEW: Doodle Creation ---
+        function createDoodles() {
+            const doodles = ['&#9878;', '&#167;', '&#128214;', '&#128196;', '&#128203;']; // Gavel, Section, Book, Scroll, Clipboard
+            const doodleCount = 20;
+            for (let i = 0; i < doodleCount; i++) {
+                const doodle = document.createElement('div');
+                doodle.classList.add('doodle');
+                doodle.innerHTML = doodles[Math.floor(Math.random() * doodles.length)];
+                doodle.style.left = `${Math.random() * 100}vw`;
+                doodle.style.animationDuration = `${10 + Math.random() * 15}s`;
+                doodle.style.animationDelay = `${Math.random() * 10}s`;
+                doodle.style.setProperty('--x-start', `${-5 + Math.random() * 10}vw`);
+                doodle.style.setProperty('--x-end', `${-5 + Math.random() * 10}vw`);
+                animationContainer.appendChild(doodle);
+            }
+        }
+        createDoodles();
+
     </script>
-
-    <!-- Floating Chatbot -->
-<div id="chatbot-container" class="fixed bottom-6 right-6 w-80 h-96 bg-stone-800 rounded-t-xl shadow-xl flex flex-col border border-white/10 z-50 hidden">
-    <div class="bg-stone-900 px-4 py-3 rounded-t-xl flex justify-between items-center">
-        <h3 class="font-bold text-bright-pink">LLB.ai Assistant</h3>
-        <button id="close-chatbot" class="text-gray-400 hover:text-white">&times;</button>
-    </div>
-    <div id="chatbot-messages" class="flex-1 p-4 overflow-y-auto text-sm space-y-2">
-        <!-- Messages will appear here -->
-    </div>
-    <div class="p-3 border-t border-white/10">
-        <input id="chatbot-input" type="text" placeholder="Type your question..." 
-               class="w-full bg-stone-700 text-white rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-bright-pink">
-    </div>
-</div>
-
-<!-- Chatbot Toggle Button -->
-<button id="chatbot-toggle" class="fixed bottom-6 right-6 bg-bright-pink text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform z-40">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-    </svg>
-</button>
 </body>
 </html>

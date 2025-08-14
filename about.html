@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meet Our Team | Wooden Elegance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --wood-light: #D2B48C;
+            --wood-medium: #8B5A2B;
+            --wood-dark: #5D4037;
+            --wood-accent: #A78A7F;
+            --text-light: #F5F5F5;
+            --text-dark: #3E2723;
+            --gold-accent: #D4AF37;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: 
+                linear-gradient(rgba(45, 35, 26, 0.85), rgba(45, 35, 26, 0.85)),
+                url('https://images.unsplash.com/photo-1605106702734-205df224ecce?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover fixed no-repeat;
+            color: var(--text-light);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 5rem;
+            position: relative;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 3px;
+            background: var(--gold-accent);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .team-card {
+            background: rgba(93, 64, 55, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(167, 138, 127, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            background: rgba(93, 64, 55, 0.8);
+        }
+
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold-accent), var(--wood-accent));
+        }
+
+        .image-placeholder {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(139, 90, 43, 0.3);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--gold-accent);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-placeholder::before {
+            content: 'Photo';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(61, 43, 31, 0.7);
+            color: var(--text-light);
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .team-card h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+            font-weight: 500;
+        }
+
+        .team-card h3 {
+            color: var(--gold-accent);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 400;
+            font-style: italic;
+            letter-spacing: 0.5px;
+        }
+
+        .team-card p {
+            text-align: center;
+            font-size: 1rem;
+            opacity: 0.9;
+            padding: 0 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 3rem 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .team-card {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Our Creative Collective</h1>
+            <p>Five brilliant minds, one shared passion for crafting exceptional digital experiences. Meet the artisans behind the code.</p>
+        </div>
+        
+        <div class="team-grid">
+            <!-- Sibam - Project Manager -->
+            <div class="team-card">
+                <div class="image-placeholder"></div>
+                <h2>Sibam</h2>
+                <h3>Project Manager & Visionary</h3>
+                <p>The architect of our success, Sibam masterfully orchestrates projects with a rare blend of technical insight and strategic foresight. His leadership transforms complex challenges into elegant solutions, ensuring every deliverable exceeds expectations.</p>
+            </div>
+            
+            <!-- Suryansh - Marketing -->
+            <div class="team-card">
+                <div class="image-placeholder"></div>
+                <h2>Suryansh</h2>
+                <h3>Marketing Strategist & Storyteller</h3>
+                <p>With an uncanny ability to distill complex tech into compelling narratives, Suryansh crafts messages that resonate. His campaigns don't just attract users—they create lasting relationships and vibrant communities.</p>
+            </div>
+            
+            <!-- Spandan - Developer -->
+            <div class="team-card">
+                <div class="image-placeholder"></div>
+                <h2>Spandan</h2>
+                <h3>Senior Developer & Problem Solver</h3>
+                <p>A true code artisan, Spandan approaches programming with both precision and creativity. His solutions are as elegant as they are robust, consistently pushing the boundaries of what our technology can achieve.</p>
+            </div>
+            
+            <!-- Shayanna - Developer -->
+            <div class="team-card">
+                <div class="image-placeholder"></div>
+                <h2>Shayanna</h2>
+                <h3>UX Developer & Interface Artist</h3>
+                <p>Shayanna builds experiences that feel like second nature. With an obsessive eye for detail and deep empathy for users, she crafts interfaces that are intuitive, accessible, and delightful to interact with.</p>
+            </div>
+            
+            <!-- Nandini - SDE II -->
+            <div class="team-card">
+                <div class="image-placeholder"></div>
+                <h2>Nandini</h2>
+                <h3>SDE II & Systems Architect</h3>
+                <p>The backbone of our technical excellence, Nandini designs systems that scale effortlessly. Her code is poetry in motion—efficient, maintainable, and always ahead of the curve in adopting innovative solutions.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

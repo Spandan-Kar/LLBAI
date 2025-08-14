@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms and Conditions - LLB.ai</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Lora:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .font-logo { font-family: 'Playfair Display', serif; }
+        .font-punchline { font-family: 'Lora', serif; }
+        .font-body { font-family: 'Poppins', sans-serif; }
+        body {
+            background-color: #3C2A1E;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+        #animation-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; overflow: hidden;
+        }
+        .doodle {
+            position: absolute; bottom: -150px;
+            color: rgba(255, 255, 255, 0.07);
+            animation: floatUp 5s infinite linear;
+        }
+        @keyframes floatUp {
+            from { transform: translateY(0) translateX(var(--x-start)); opacity: 0; }
+            25% { opacity: 1; } 75% { opacity: 1; }
+            to { transform: translateY(-120vh) translateX(var(--x-end)); opacity: 0; }
+        }
+        .text-bright-pink {
+            color: #f9a8d4;
+            text-shadow: 0 0 25px rgba(249, 168, 212, 0.8), 0 0 10px rgba(249, 168, 212, 1);
+        }
+        .btn-blue {
+            background-color: #3b82f6; color: white;
+            padding: 0.6rem 1.25rem; border-radius: 0.5rem;
+            font-weight: bold; transition: all 0.2s ease-in-out;
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.7);
+        }
+        .btn-blue:hover:not(:disabled) { background-color: #2563eb; transform: scale(1.05); box-shadow: 0 0 30px rgba(59, 130, 246, 1); }
+        .btn-blue:disabled { background-color: #555; cursor: not-allowed; box-shadow: none; }
+        .crystal-glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .terms-section {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 1.5rem;
+        }
+        .terms-section h2 {
+            border-left: 4px solid #f9a8d4;
+            padding-left: 1rem;
+        }
+        ol.terms-list {
+            counter-reset: item;
+            padding-left: 1.5rem;
+        }
+        ol.terms-list > li {
+            counter-increment: item;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        ol.terms-list > li:before {
+            content: counter(item) ".";
+            position: absolute;
+            left: -1.5rem;
+            color: #f9a8d4;
+            font-weight: bold;
+        }
+        ul.terms-sublist {
+            padding-left: 1.5rem;
+            list-style-type: disc;
+            margin-top: 0.5rem;
+        }
+        .highlight {
+            background-color: rgba(249, 168, 212, 0.2);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+        }
+    </style>
+</head>
+<body class="font-body text-gray-300">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-stone-900/20 backdrop-blur-lg shadow-sm border-b border-white/10">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="font-logo text-3xl font-black text-bright-pink">LLB.ai</a>
+            <nav class="hidden md:flex space-x-4 items-center">
+                <a href="index.html" class="btn-blue">Home</a>
+                <a href="index.html#features" class="btn-blue">Features</a>
+                <a href="index.html#faq" class="btn-blue">FAQ</a>
+                <li><a href="terms.html">Terms</a></li>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="relative z-10 pt-32 pb-20 px-6">
+        <div class="container mx-auto max-w-4xl">
+            <h1 class="font-logo text-5xl md:text-6xl font-black text-center mb-8 text-bright-pink">Terms and Conditions</h1>
+            <p class="text-center mb-12">Last Updated: January 1, 2025</p>
+            
+            <div class="crystal-glass-card rounded-xl p-8">
+                <div class="terms-section">
+                    <h2 class="font-logo text-3xl font-bold mb-4 text-bright-pink">1. Introduction</h2>
+                    <p>Welcome to LLB.ai ("Company", "we", "our", "us"). These Terms and Conditions ("Terms") govern your use of our website located at llb.ai ("Website") and our AI-powered legal document analysis services ("Services").</p>
+                    <p>By accessing or using our Services, you ("User", "you", "your") agree to be bound by these Terms. If you disagree with any part of these Terms, you must not use our Services.</p>
+                </div>
+
+                <div class="terms-section">
+                    <h2 class="font-logo text-3xl font-bold mb-4 text-bright-pink">2. Service Description</h2>
+                    <p>LLB.ai provides AI-powered tools for analyzing legal documents, including but not limited to:</p>
+                    <ul class="terms-sublist">
+                        <li>Document summarization and analysis</li>
+                        <li>Risk assessment scoring</li>
+                        <li>Negotiation strategy suggestions</li>
+                        <li>Document comparison features</li>
+                        <li>Contract drafting assistance</li>
+                    </ul>
+                    <p class="mt-4"><span class="highlight">Important:</span> Our Services are designed to assist with document understanding but do not constitute legal advice. We are not a law firm and do not provide legal services.</p>
+                </div>
+
+                <div class="terms-section">
+                    <h2 class="font-logo text-3xl font-bold mb-4 text-bright-pink">3. User Accounts</h2>
+                    <ol class="terms-list">
+                        <li><strong>Account Creation:</strong> To access certain features, you must register for an account and provide accurate, complete information.</li>
+                        <li><strong>Account Security:</strong> You are responsible for maintaining the confidentiality of your account credentials and for all activities under your account.</li>
+                        <li><strong>Age Requirement:</strong> You must be at least 18 years old to use our Services.</li>
+                        <li><strong>Account Termination:</strong> We reserve the right to suspend or terminate accounts that violate these Terms or engage in prohibited activities.</li>
+                    </ol>
+                </div>
+
+                <div class="terms-section">
+                    <h2 class="font-logo text-3xl font-bold mb-4 text-bright-pink">4. Acceptable Use</h2>
+                    <p>You agree not to use our Services for any unlawful purpose or in any way that:</p>
+                    <ul class="terms-sublist">
+                        <li>Violates any applicable laws or regulations</li>
+                        <li>Infringes on intellectual property rights</li>
+                        <li>Contains harmful or malicious code</li>
+                        <li>Attempts to reverse engineer our Services</li>
+                        <li>Seeks to exploit minors</li>
+                        <li>Promotes illegal activities</li>
+                    </ul>
+                    <p class="mt-4">We reserve the right to determine what constitutes inappropriate use and to take appropriate action.</p>
+                </div>
+
+                <div class="terms-section">
+                    <h2 class="font-logo text-3xl font-bold mb-4 text-bright-pink">5. Intellectual Property</h2>
+                    <ol class="terms-list">
+                        <li><strong>Our Content:</strong> All content, features, and functionality on our Website and Services are owned by us or our licensors and are protected by international copyright and intellectual property laws.</li>
+                        <li><strong>Your Content:</strong> You retain ownership of any documents you upload, but grant us a limited license to process them solely to provide the Services.</li>
+                        <li><strong>Feedback:</strong> Any feedback you provide may be used by us without restriction or compensation.</li>
+                    </ol>
+                </div>
+
+                <div class="terms-section">
+                    <h2 class="font-logo text-3xl font-bold mb-4 text-bright-pink">6. Privacy Policy</h2>
+                    <p>Your privacy is important to us. Our <a href="privacy.html" class="text-bright-pink underline">Privacy Policy</a> explains how we collect, use, and protect your information. By using our Services, you consent to our data practices.</p>
+                </div>
+
+                <div class="terms-section">
+                    <h2 class="font-logo text-3xl font-bold mb-4 text-bright-pink">7. Fees and Payments</h2>
+                    <ol class="terms-list">
+                        <li><strong>Free Trial:</strong> We may offer a free trial period after which paid subscription is required.</li>
+                        <li><strong>Subscriptions:</strong> Paid subscriptions automatically renew unless canceled at least 24 hours before the renewal date.</li>
+                        <li><strong>Refunds:</strong> Refunds are issued at our sole discretion, except where required by law.</li>
+                        <li><strong>Price Changes:</strong> We may change prices with 30 days notice to current subscribers.</li>
+                    </ol>
+                </div>
+
+                <div class="terms-section">
+                    <h2 class="font-logo text-3xl font-bold mb-4 text-bright-pink">8. Disclaimer of Warranties</h2>
+                    <p>OUR SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED. WE DO NOT WARRANT THAT:</p>
+                    <ul class="terms-sublist">
+                        <li>THE SERVICES WILL BE UNINTERRUPTED OR ERROR-FREE</li>
+                        <li>THE RESULTS OF USING THE SERVICES WILL BE ACCURATE OR RELIABLE</li>
+                        <li>THE QUALITY OF ANY SERVICES WILL MEET YOUR EXPECTATIONS</li>
+                    </ul>
+                    <p class="mt-4 highlight">THE SERVICES ARE NOT A SUBSTITUTE FOR PROFESSIONAL LEGAL ADVICE. ALWAYS CONSULT A QUALIFIED ATTORNEY FOR LEGAL MATTERS.</p>
+                </div>
+
+                <div class="terms-section">
+                    <h2 class="font-logo text-3xl font-bold mb-4 text-bright-pink">9. Limitation of Liability</h2>
+                    <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, LLB.AI SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM:</p>
+                    <ol class="terms-list">
+                        <li>YOUR USE OR INABILITY TO USE THE SERVICES</li>
+                        <li>ANY UNAUTHORIZED ACCESS TO OR USE OF OUR SERVERS</li>
+                        <li>ANY INTERRUPTION OR CESSATION OF TRANSMISSION TO OR FROM OUR SERVICES</li>
+                        <li>ANY BUGS, VIRUSES, OR SIMILAR THAT MAY BE TRANSMITTED THROUGH OUR SERVICES</li>
+                        <li>ANY ERRORS OR OMISSIONS IN ANY CONTENT OR FOR ANY LOSS OR DAMAGE INCURRED AS A RESULT OF THE USE OF ANY CONTENT</li>
+                    </ol>
+                </div>
+
+                <div class="terms-section">
+                    <h2 class="font-logo text-3xl font-bold mb-4 text-bright-pink">10. Indemnification</h2>
+                    <p>You agree to defend, indemnify, and hold harmless LLB.ai and its affiliates, officers, directors, employees, and agents from any claims, liabilities, damages, losses, and expenses arising from:</p>
+                    <ul class="terms-sublist">
+                        <li>Your use of the Services</li>
+                        <li>Your violation of these Terms</li>
+                        <li>Your violation of any third-party rights</li>
+                        <li>Any content you submit or transmit through the Services</li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h2 class="font-logo text-3xl font-bold mb-4 text-bright-pink">11. Governing Law</h2>
+                    <p>These Terms shall be governed by and construed in accordance with the laws of the State of Delaware, without regard to its conflict of law provisions. Any disputes shall be resolved in the state or federal courts located in Delaware.</p>
+                </div>
+
+                <div class="terms-section">
+                    <h2 class="font-logo text-3xl font-bold mb-4 text-bright-pink">12. Changes to Terms</h2>
+                    <p>We reserve the right to modify these Terms at any time. We will provide notice of material changes through our Website or via email. Your continued use after such changes constitutes acceptance of the new Terms.</p>
+                </div>
+
+                <div class="terms-section">
+                    <h2 class="font-logo text-3xl font-bold mb-4 text-bright-pink">13. Contact Information</h2>
+                    <p>For questions about these Terms, please contact us at:</p>
+                    <p class="mt-2">
+                        Mr. Spandan Kar<br>
+                        Senior Software Engineer,<br>
+                        Google DeepMind HQ,<br>
+                        San Francisco Bay Area<br>
+                    </p>
+                </div>
+
+                <div class="mt-8 text-center">
+                    <p>By using our Services, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-white/10 py-8 text-center">
+        <div class="container mx-auto px-6">
+            <p class="text-stone-300">&copy; 2025 LLB.ai. All Rights Reserved.</p>
+            <div class="mt-4 flex justify-center space-x-6">
+                <a href="terms.html" class="text-gray-400 hover:text-white">Terms</a>
+                <a href="privacy.html" class="text-gray-400 hover:text-white">Privacy</a>
+                <a href="cookies.html" class="text-gray-400 hover:text-white">Cookies</a>
+                <a href="contact.html" class="text-gray-400 hover:text-white">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        // Mobile menu toggle functionality can be added here if needed
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            // Add mobile menu toggle logic here
+            console.log('Mobile menu clicked');
+        });
+    </script>
+</body>
+</html>

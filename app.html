@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLB.ai App - Analyze Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Lora:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js`;
+    </script>
+    <style>
+        .font-logo { font-family: 'Playfair Display', serif; }
+        .font-punchline { font-family: 'Lora', serif; }
+        .font-body { font-family: 'Poppins', sans-serif; }
+        html { height: 100%; }
+        body {
+            background-color: #3C2A1E;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            overflow: hidden;
+            height: 100vh;
+        }
+        .text-bright-pink {
+            color: #f9a8d4;
+            text-shadow: 0 0 25px rgba(249, 168, 212, 0.8), 0 0 10px rgba(249, 168, 212, 1);
+        }
+        .btn-blue {
+            background-color: #3b82f6; color: white;
+            padding: 0.6rem 1.25rem; border-radius: 0.5rem;
+            font-weight: bold; transition: all 0.2s ease-in-out;
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.7);
+        }
+        .btn-blue:hover:not(:disabled) { background-color: #2563eb; transform: scale(1.05); box-shadow: 0 0 30px rgba(59, 130, 246, 1); }
+        .btn-blue:disabled { background-color: #555; cursor: not-allowed; box-shadow: none; }
+        .crystal-glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(249, 168, 212, 0.3); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(249, 168, 212, 0.5); }
+        .loader { border: 4px solid rgba(255,255,255,0.2); border-top: 4px solid #f9a8d4; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .prose-invert a { color: #f9a8d4; }
+        .prose-invert strong { color: white; }
+    </style>
+</head>
+<body class="font-body text-white flex flex-col opacity-0 transition-opacity duration-500">
+
+    <header class="bg-stone-900/20 backdrop-blur-lg shadow-sm border-b border-white/10 relative z-10">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="index.html" class="font-logo text-3xl font-black text-bright-pink">LLB.ai</a>
+            <div id="app-header-nav" class="hidden items-center space-x-4">
+                <span id="user-greeting" class="font-semibold"></span>
+                <button id="logout-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow flex flex-col md:flex-row overflow-hidden relative z-10 p-4 gap-4">
+        <div class="w-full md:w-1/3 lg:w-1/4 crystal-glass-card p-6 flex flex-col rounded-xl overflow-y-auto">
+            <h2 class="font-logo text-3xl text-bright-pink mb-4">Upload Document</h2>
+            <div id="upload-area" class="border-2 border-dashed border-white/20 rounded-lg p-8 text-center cursor-pointer hover:border-white/50 hover:bg-white/10 transition-colors">
+                <input type="file" id="file-input" class="hidden" accept=".pdf,.txt,.doc,.docx">
+                <svg class="mx-auto h-12 w-12 text-white/40" stroke="currentColor" fill="none" viewBox="0 0 48 48"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="1" /></svg>
+                <p id="upload-text" class="mt-2 text-sm text-white/60">Click to upload or drag and drop</p>
+                <p class="mt-1 text-xs text-white/40">Supports PDF, TXT, DOC, DOCX</p>
+            </div>
+            <div id="file-info" class="hidden mt-4 bg-black/20 p-3 rounded-lg">
+                <p class="text-sm font-medium text-white truncate" id="file-name"></p>
+                <p class="text-xs text-white/60" id="file-type"></p>
+            </div>
+            <div class="relative flex py-5 items-center">
+                <div class="flex-grow border-t border-white/20"></div>
+                <span class="flex-shrink mx-4 text-white/60 text-sm">OR</span>
+                <div class="flex-grow border-t border-white/20"></div>
+            </div>
+            <div>
+                <h3 class="font-logo text-xl text-bright-pink mb-2">Write Here</h3>
+                <textarea id="text-input" class="w-full h-48 bg-black/20 border border-white/20 rounded-lg p-3 text-white focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="Paste your legal document text here..."></textarea>
+            </div>
+            <button id="analyze-button" class="w-full btn-blue mt-6" disabled>Analyze Document</button>
+        </div>
+
+        <div class="w-full md:w-2/3 lg:w-3/4 flex flex-col">
+            <div class="border-b border-white/10">
+                <nav id="results-nav" class="hidden flex space-x-2 px-6" aria-label="Tabs">
+                    <button id="tab-dashboard" class="text-gray-300 hover:text-white px-3 py-4 text-sm font-medium border-b-2 border-transparent">Dashboard</button>
+                    <button id="tab-analysis" class="text-gray-300 hover:text-white px-3 py-4 text-sm font-medium border-b-2 border-transparent">Full Analysis</button>
+                    <button id="tab-chat" class="text-gray-300 hover:text-white px-3 py-4 text-sm font-medium border-b-2 border-transparent">Chat</button>
+                </nav>
+            </div>
+            <div id="results-container" class="crystal-glass-card rounded-xl flex-grow p-6 overflow-y-auto h-full">
+                <div id="analysis-placeholder" class="flex flex-col items-center justify-center h-full text-center">
+                    <svg class="w-24 h-24 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <h3 class="mt-4 text-lg font-semibold text-white/70">Your analysis will appear here</h3>
+                </div>
+                <div id="analysis-loading" class="hidden flex-col items-center justify-center h-full">
+                    <div class="loader"></div>
+                    <p class="mt-4 text-lg font-semibold text-white/70">Analyzing your document...</p>
+                    <p id="loading-details" class="text-sm text-white/50 mt-2"></p>
+                </div>
+                <div id="view-dashboard" class="hidden space-y-6 prose prose-invert max-w-none"></div>
+                <div id="view-analysis" class="hidden space-y-6 prose prose-invert max-w-none"></div>
+                <div id="view-chat" class="hidden h-full flex flex-col">
+                     <div id="chat-window" class="flex-grow overflow-y-auto mb-4 space-y-4 p-4 bg-black/20 rounded-lg"></div>
+                     <div class="flex"><input type="text" id="chat-input" placeholder="Ask a question..." class="flex-grow bg-black/20 border border-white/20 rounded-l-lg p-3 focus:outline-none focus:ring-2 focus:ring-pink-500 text-white"><button id="chat-send" class="btn-blue font-bold p-3 rounded-r-lg">Send</button></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAzumRqz2Lat4M_CW9LtiUebaZTQIXJ_MA",
+            authDomain: "llbai-baefd.firebaseapp.com",
+            projectId: "llbai-baefd",
+            storageBucket: "llbai-baefd.appspot.com",
+            messagingSenderId: "12532846117",
+            appId: "1:12532846117:web:0e3b74c0ec2f495b96f9cc",
+            measurementId: "G-D0HK063ZF8"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Gemini API Configuration
+        const GEMINI_API_KEY = "AIzaSyB5-vt0JyYbOtCYxRQb-YNu-BJOYXg2oYk";
+        const GEMINI_MODEL = "gemini-1.5-pro-latest";
+
+        // State Management
+        let currentUser = null;
+        let documentText = '';
+        let documentName = '';
+
+        // DOM Elements
+        const elements = {
+            userGreeting: document.getElementById('user-greeting'),
+            logoutBtn: document.getElementById('logout-btn'),
+            appHeaderNav: document.getElementById('app-header-nav'),
+            chatWindow: document.getElementById('chat-window'),
+            chatInput: document.getElementById('chat-input'),
+            chatSend: document.getElementById('chat-send'),
+            analyzeButton: document.getElementById('analyze-button'),
+            textInput: document.getElementById('text-input'),
+            fileInput: document.getElementById('file-input'),
+            fileInfo: document.getElementById('file-info'),
+            fileNameEl: document.getElementById('file-name'),
+            fileTypeEl: document.getElementById('file-type'),
+            uploadArea: document.getElementById('upload-area'),
+            uploadText: document.getElementById('upload-text'),
+            loadingDetails: document.getElementById('loading-details')
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.body.classList.remove('opacity-0');
+            }, 100);
+            setupEventListeners();
+        });
+
+        // Authentication state observer
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                currentUser = user;
+                elements.appHeaderNav.classList.remove('hidden');
+                elements.appHeaderNav.classList.add('flex');
+                elements.userGreeting.textContent = `Hi, ${user.displayName || user.email.split('@')[0]}!`;
+                loadChatHistory(user.uid);
+            } else {
+                window.location.replace('./index.html');
+            }
+        });
+
+        // Event Listeners Setup
+        function setupEventListeners() {
+            // File upload handling
+            elements.uploadArea.addEventListener('click', () => elements.fileInput.click());
+            elements.uploadArea.addEventListener('dragover', handleDragOver);
+            elements.uploadArea.addEventListener('dragleave', handleDragLeave);
+            elements.uploadArea.addEventListener('drop', handleDrop);
+
+            // File input change handler
+            elements.fileInput.addEventListener('change', handleFileUpload);
+
+            // Text input handler
+            elements.textInput.addEventListener('input', handleTextTyping);
+
+            // Analyze button
+            elements.analyzeButton.addEventListener('click', analyzeDocument);
+
+            // Chat functionality
+            elements.chatSend.addEventListener('click', handleSendMessage);
+            elements.chatInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') handleSendMessage();
+            });
+
+            // Tab navigation
+            document.getElementById('tab-dashboard').addEventListener('click', () => switchTab('dashboard'));
+            document.getElementById('tab-analysis').addEventListener('click', () => switchTab('analysis'));
+            document.getElementById('tab-chat').addEventListener('click', () => switchTab('chat'));
+
+            // Logout button
+            elements.logoutBtn.addEventListener('click', async () => {
+                await auth.signOut();
+            });
+        }
+
+        // Drag and Drop Handlers
+        function handleDragOver(e) {
+            e.preventDefault();
+            elements.uploadArea.classList.add('border-white/50', 'bg-white/10');
+            elements.uploadText.textContent = 'Drop your document here';
+        }
+
+        function handleDragLeave() {
+            elements.uploadArea.classList.remove('border-white/50', 'bg-white/10');
+            elements.uploadText.textContent = 'Click to upload or drag and drop';
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            handleDragLeave();
+            if (e.dataTransfer.files.length) {
+                elements.fileInput.files = e.dataTransfer.files;
+                elements.fileInput.dispatchEvent(new Event('change'));
+            }
+        }
+
+        // File Upload Handler
+        async function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            elements.textInput.value = '';
+            documentName = file.name;
+            elements.fileNameEl.textContent = file.name;
+            elements.fileTypeEl.textContent = `Type: ${file.type || file.name.split('.').pop().toUpperCase()}`;
+            elements.fileInfo.classList.remove('hidden');
+            elements.analyzeButton.disabled = false;
+            
+            showLoadingState('Processing your document...');
+
+            try {
+                if (file.type === 'application/pdf') {
+                    await processPDFFile(file);
+                } else if (file.type.includes('text') || file.name.endsWith('.txt')) {
+                    await processTextFile(file);
+                } else if (file.type.includes('msword') || file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
+                    await processWordFile(file);
+                } else {
+                    throw new Error("Unsupported file type");
+                }
+                
+                hideLoadingState();
+                elements.analyzeButton.disabled = false;
+                
+            } catch (error) {
+                console.error("File processing error:", error);
+                handleErrorState(`Error processing file: ${error.message}`);
+                elements.fileInfo.classList.add('hidden');
+                elements.analyzeButton.disabled = true;
+            }
+        }
+
+        // File Processing Functions
+        async function processPDFFile(file) {
+            elements.loadingDetails.textContent = 'Extracting text from PDF...';
+            const arrayBuffer = await file.arrayBuffer();
+            const loadingTask = pdfjsLib.getDocument(arrayBuffer);
+            const pdf = await loadingTask.promise;
+            
+            let fullText = '';
+            const pageCount = pdf.numPages;
+            
+            for (let i = 1; i <= pageCount; i++) {
+                elements.loadingDetails.textContent = `Processing page ${i} of ${pageCount}...`;
+                const page = await pdf.getPage(i);
+                const textContent = await page.getTextContent();
+                fullText += textContent.items.map(item => item.str).join(' ') + '\n';
+            }
+            
+            documentText = fullText;
+        }
+
+        async function processTextFile(file) {
+            elements.loadingDetails.textContent = 'Reading text file...';
+            documentText = await file.text();
+        }
+
+        async function processWordFile(file) {
+            elements.loadingDetails.textContent = 'Extracting text from Word document...';
+            alert("Word document support is limited. For best results, please convert to PDF or plain text.");
+            const text = await file.text();
+            documentText = text;
+        }
+
+        // Text Input Handler
+        function handleTextTyping() {
+            elements.fileInput.value = '';
+            elements.fileInfo.classList.add('hidden');
+            documentText = elements.textInput.value.trim();
+            elements.analyzeButton.disabled = documentText.length === 0;
+        }
+
+        // Document Analysis
+        async function analyzeDocument() {
+            const content = elements.textInput.value.trim() || documentText;
+            if (!content) return;
+            
+            if (content.length > 100000) {
+                alert("Document is too large. Please split into smaller sections.");
+                return;
+            }
+            
+            showLoadingState('Analyzing document with AI...');
+            
+            try {
+                const prompt = `Analyze this legal document and provide:
+1. A concise summary (2-3 sentences)
+2. Key points (bullet points)
+3. Potential issues or red flags
+4. Recommended next steps
+
+Document Content:
+${content}`;
+                
+                const aiResponse = await callGeminiAPI(prompt);
+                
+                // Display results
+                document.getElementById('view-dashboard').innerHTML = `
+                    <div class="crystal-glass-card p-6 rounded-lg">
+                        <h3 class="text-2xl font-bold text-bright-pink mb-4">Document Summary</h3>
+                        ${formatAnalysisResponse(aiResponse)}
+                    </div>
+                `;
+                
+                document.getElementById('view-analysis').innerHTML = `
+                    <div class="crystal-glass-card p-6 rounded-lg">
+                        <h3 class="text-2xl font-bold text-bright-pink mb-4">Full Analysis</h3>
+                        ${formatAnalysisResponse(aiResponse, true)}
+                    </div>
+                `;
+                
+                // Show the results
+                document.getElementById('results-nav').classList.remove('hidden');
+                hideLoadingState();
+                switchTab('dashboard');
+                
+            } catch (error) {
+                console.error("Analysis error:", error);
+                handleErrorState(`Analysis failed: ${error.message}`);
+            }
+        }
+
+        // Gemini API Call
+        async function callGeminiAPI(prompt) {
+            if (!GEMINI_API_KEY.startsWith("AIza")) {
+                throw new Error("Gemini API Key is not properly configured.");
+            }
+            
+            // Token estimation (roughly 1 token ≈ 4 characters)
+            const tokenEstimate = Math.ceil(prompt.length / 4);
+            if (tokenEstimate > 128000) {
+                throw new Error(`Document too large (estimated ${tokenEstimate} tokens). Try a shorter document.`);
+            }
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+            
+            try {
+                const payload = { 
+                    contents: [{ 
+                        role: "user", 
+                        parts: [{ text: prompt }] 
+                    }],
+                    generationConfig: {
+                        temperature: 0.3,
+                        topP: 0.95,
+                        topK: 64,
+                        maxOutputTokens: 8192
+                    }
+                };
+                
+                const response = await fetch(apiUrl, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify(payload) 
+                });
+                
+                if (!response.ok) {
+                    const err = await response.json();
+                    console.error("Full API Error:", err);
+                    
+                    if (err.error?.message?.includes("quota")) {
+                        throw new Error("API quota exceeded. Please try again later or check your Google Cloud quota.");
+                    }
+                    throw new Error(err.error?.message || "API request failed");
+                }
+                
+                const result = await response.json();
+                if (!result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                    throw new Error("Unexpected API response format");
+                }
+                
+                return result.candidates[0].content.parts[0].text;
+            } catch (error) {
+                console.error("API Call Error:", error);
+                throw new Error(`Failed to analyze: ${error.message}`);
+            }
+        }
+
+        // Response Formatting
+        function formatAnalysisResponse(text, full = false) {
+            // Convert markdown-like formatting to HTML
+            let html = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/^# (.*$)/gm, '<h3 class="text-xl font-bold mt-6 mb-2">$1</h3>')
+                .replace(/^## (.*$)/gm, '<h4 class="text-lg font-semibold mt-4 mb-2">$1</h4>')
+                .replace(/^-\s(.*$)/gm, '<li>$1</li>')
+                .replace(/\n/g, '<br>');
+
+            // For dashboard view, only show the first part
+            if (!full) {
+                const sections = html.split('<h3');
+                if (sections.length > 1) {
+                    html = `<h3${sections[1]}`;
+                    if (sections.length > 2) {
+                        html += `<p class="mt-4 text-sm text-white/70">+ ${sections.length - 1} more sections...</p>`;
+                    }
+                }
+            }
+            
+            // Wrap bullet points in UL
+            html = html.replace(/<li>.*?<\/li>/g, (match) => {
+                return `<ul class="list-disc pl-5 my-2">${match}</ul>`;
+            });
+            
+            return html;
+        }
+
+        // Tab Navigation
+        function switchTab(tab) {
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-analysis').classList.add('hidden');
+            document.getElementById('view-chat').classList.add('hidden');
+            
+            document.getElementById(`view-${tab}`).classList.remove('hidden');
+            
+            // Update active tab styling
+            document.querySelectorAll('#results-nav button').forEach(btn => {
+                btn.classList.remove('border-pink-500', 'text-white');
+                btn.classList.add('border-transparent', 'text-gray-300');
+            });
+            document.getElementById(`tab-${tab}`).classList.add('border-pink-500', 'text-white');
+            document.getElementById(`tab-${tab}`).classList.remove('border-transparent', 'text-gray-300');
+        }
+
+        // Chat Functionality
+        function loadChatHistory(userId) {
+            const chatHistoryRef = db.collection('users').doc(userId).collection('chatHistory');
+            const q = chatHistoryRef.orderBy('timestamp');
+
+            q.onSnapshot((snapshot) => {
+                elements.chatWindow.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const message = doc.data();
+                    appendMessage(message.text, message.sender);
+                });
+            });
+        }
+
+        async function saveMessage(userId, text, sender) {
+            try {
+                await db.collection('users').doc(userId).collection('chatHistory').add({
+                    text,
+                    sender,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch (error) {
+                console.error("Error saving message: ", error);
+            }
+        }
+
+        async function handleSendMessage() {
+            const userMessage = elements.chatInput.value.trim();
+            if (!userMessage || !currentUser) return;
+            
+            elements.chatInput.value = '';
+            appendMessage(userMessage, 'user');
+            await saveMessage(currentUser.uid, userMessage, 'user');
+
+            const contextDocument = elements.textInput.value.trim() || documentText;
+            if (!contextDocument) {
+                 const aiResponse = "Please provide a document to chat about first by uploading or pasting it in the left panel.";
+                 appendMessage(aiResponse, 'ai');
+                 await saveMessage(currentUser.uid, aiResponse, 'ai');
+                 return;
+            }
+
+            const prompt = `You are a helpful legal assistant. A user has uploaded a document and is asking a question. 
+            
+            Original Document Text:
+            ---
+            ${contextDocument}
+            ---
+            
+            User's Question: "${userMessage}"
+            
+            Based ONLY on the document text provided, answer the question in a helpful and professional manner. If the answer is not in the document, say "The document doesn't contain information about this." and suggest what they might look for.`;
+            
+            try {
+                const aiResponse = await callGeminiAPI(prompt);
+                appendMessage(aiResponse, 'ai');
+                await saveMessage(currentUser.uid, aiResponse, 'ai');
+            } catch (error) {
+                console.error("Gemini API Error:", error);
+                const errorMessage = "Sorry, I encountered an error trying to respond. Please try again.";
+                appendMessage(errorMessage, 'ai');
+                await saveMessage(currentUser.uid, errorMessage, 'ai');
+            }
+        }
+
+        function appendMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('p-3', 'rounded-lg', 'max-w-3xl', 'text-sm', 'w-fit', 'whitespace-pre-wrap');
+            
+            if (sender === 'user') {
+                messageDiv.classList.add('bg-blue-600', 'text-white', 'ml-auto');
+                messageDiv.innerHTML = `
+                    <div class="font-bold text-xs text-blue-200 mb-1">You</div>
+                    <div>${text}</div>
+                `;
+            } else {
+                messageDiv.classList.add('bg-pink-800', 'text-white');
+                messageDiv.innerHTML = `
+                    <div class="font-bold text-xs text-pink-200 mb-1">LLB.ai</div>
+                    <div>${text}</div>
+                `;
+            }
+            
+            elements.chatWindow.appendChild(messageDiv);
+            elements.chatWindow.scrollTop = elements.chatWindow.scrollHeight;
+            
+            if (document.getElementById('view-chat').classList.contains('hidden')) {
+                switchTab('chat');
+            }
+        }
+
+        // UI State Management
+        function showLoadingState(message) {
+            document.getElementById('analysis-placeholder').classList.add('hidden');
+            document.getElementById('analysis-loading').classList.remove('hidden');
+            elements.loadingDetails.textContent = message;
+        }
+
+        function hideLoadingState() {
+            document.getElementById('analysis-loading').classList.add('hidden');
+        }
+
+        function handleErrorState(errorMessage) {
+            document.getElementById('analysis-loading').classList.add('hidden');
+            document.getElementById('view-dashboard').innerHTML = `
+                <div class="crystal-glass-card p-6 rounded-lg bg-red-900/20">
+                    <h3 class="text-2xl font-bold text-red-400 mb-4">Analysis Failed</h3>
+                    <p class="text-white/80">${errorMessage}</p>
+                    ${errorMessage.includes('quota') ? `
+                        <div class="mt-4 p-3 bg-black/20 rounded">
+                            <p class="text-sm">ℹ️ This might be because:</p>
+                            <ul class="list-disc pl-5 mt-2 text-sm">
+                                <li>Your free quota is exhausted</li>
+                                <li>The document is too large</li>
+                                <li>Temporary API issues</li>
+                            </ul>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            document.getElementById('results-nav').classList.remove('hidden');
+            switchTab('dashboard');
+        }
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</body>
+</html>

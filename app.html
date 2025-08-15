@@ -339,56 +339,29 @@ ${content}`;
 
         // --- API & Formatting (No changes needed here) ---
         async function callGeminiAPI(prompt) {
-            let chatHistory = [];
-            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-            const payload = { contents: chatHistory };
-            
-            const apiKey = "YOUR_API_KEY_HERE"; 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${apiKey}`;
+            // SOLVED: This function now calls our own backend proxy, not Google directly.
+            // The body of the request only contains the prompt, not the API key.
+            const apiUrl = "/.netlify/functions/analyze"; // Or your Vercel/other serverless URL
 
-            // Implemented exponential backoff for API call retries
-            let response;
-            let retries = 3;
-            let delay = 1000;
-            while (retries > 0) {
-                try {
-                    response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: prompt }) // Send only the prompt
+                });
 
-                    if (response.ok) {
-                        const result = await response.json();
-                         if (result.candidates && result.candidates.length > 0 &&
-                            result.candidates[0].content && result.candidates[0].content.parts &&
-                            result.candidates[0].content.parts.length > 0) {
-                            return result.candidates[0].content.parts[0].text;
-                        } else {
-                            throw new Error("Unexpected API response format");
-                        }
-                    } else {
-                        // SOLVED: Added more detailed logging for non-ok responses
-                        const err = await response.json();
-                        console.error("API Error Response:", err); // Log the full error from the API
-                         if (err.error?.message?.toLowerCase().includes("quota")) {
-                            throw new Error("API quota exceeded. Please check your Google Cloud project billing status.");
-                        }
-                        throw new Error(err.error?.message || `API request failed with status ${response.status}`);
-                    }
-                } catch (error) {
-                    // SOLVED: Log the specific error that caused the fetch to fail
-                    console.error("Fetch Error:", error);
-                    if (retries === 1) { // Last retry failed
-                         throw new Error(`Failed to analyze after multiple retries: ${error.message}`);
-                    }
-                     console.warn(`An error occurred during fetch. Retrying in ${delay}ms...`);
-                     await new Promise(resolve => setTimeout(resolve, delay));
-                     delay *= 2;
-                     retries--;
+                if (!response.ok) {
+                    const errorResult = await response.json();
+                    throw new Error(errorResult.error || `Request failed with status ${response.status}`);
                 }
+
+                const result = await response.json();
+                return result.text;
+
+            } catch (error) {
+                console.error("Error calling backend function:", error);
+                throw new Error(`Analysis failed: ${error.message}`);
             }
-            throw new Error("Failed to get a response from the API after multiple retries.");
         }
 
         function formatAnalysisResponse(text, full = false) {
@@ -555,3 +528,4 @@ ${content}`;
     </script>
 </body>
 </html>
+
